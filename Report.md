@@ -64,9 +64,9 @@ t_test <- train[-inTrain,]
 
 ## Build model
 Here we have 52 variables to predict with, so I select Random Forest algorithm to build the model because it is quite accurate in picking the correlated variables. It takes long time but produce better result.
-K-fold cross-validation is applied to evaluate the model. In this case, I split data into 5 folds.
+K-fold cross-validation is applied to evaluate the model. In this case, I split data into 10 folds.
 ```{r, cache = T}
-t_control <- trainControl(method="cv", 5)
+t_control <- trainControl(method="cv", 10)
 modelFit <- train(classe~., data=t_train, method="rf", trControl=t_control, prox=TRUE)
 modelFit
 ```
