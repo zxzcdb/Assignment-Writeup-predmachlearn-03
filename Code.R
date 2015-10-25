@@ -41,7 +41,7 @@ t_train <- train[inTrain,]
 t_test <- train[-inTrain,]
 
 ## Build model
-t_control <- trainControl(method="cv", 5)
+t_control <- trainControl(method="cv", 10)
 modelFit <- train(classe~., data=t_train, method="rf", trControl=t_control, prox=TRUE)
 modelFit
 
