@@ -41,16 +41,13 @@ t_train <- train[inTrain,]
 t_test <- train[-inTrain,]
 
 ## Build model
-t_control <- trainControl(method="cv", 10)
+t_control <- trainControl(method="cv", 5)
 modelFit <- train(classe~., data=t_train, method="rf", trControl=t_control, prox=TRUE)
-modelFit
 
 ## Test model
-testmd <- predict(modelFit, t_test)
+testmd <- predict(modelFit, newdata=t_test)
 confusionMatrix(t_test$classe, testmd)
-accuracy <- postResample(testmd, t_test$classe)
-accuracy
 
 ## Predict
-Pred <- predict(modelFit, test)
+Pred <- predict(modelFit, newdata=test)
 Pred
