@@ -63,15 +63,35 @@ t_test <- train[-inTrain,]
 ```
 
 ## Build model
-Here we have 52 variables to predict with, so I select Random Forest algorithm to build the model because it is quite accurate in picking the correlated variables.
+Here we have 52 variables to predict with, so I select Random Forest algorithm to build the model because it is quite accurate in picking the correlated variables. It takes long time but produce better result.
 K-fold cross-validation is applied to evaluate the model. In this case, I split data into 10 folds.
 ```{r, cache = T}
 t_control <- trainControl(method="cv", 10)
 modelFit <- train(classe~., data=t_train, method="rf", trControl=t_control, prox=TRUE)
-modelFit
+
 ```
 
-## Evaluate the model
+## Test the model
+```{r, cache = T}
+testmd <- predict(modelFit, newdata=t_test)
+table(testmd, t_test$classe)
+accuracy <- postResample(testmd, t_test$classe)
+accuracy
 ```
+```
+##  Accuracy     Kappa 
+## 0.9930331 0.9911870
+```
+Accuracy is 0.993. Model is considered accurate.
 
+## Predict
+After the model built, I will use it to predict with 20 lines of data in test file.
+```{r, cache = T}
+Pred <- predict(modelFit, newdata=test)
+Pred
+```
+The result is as follows:
+```
+##  [1] B A B A A E D B A A B C B A E E A B B B
+## Levels: A B C D E
 ```
