@@ -18,7 +18,9 @@ library(randomForest)
 ```
 
 ##　Data input
-
+Two groups of data are imported.
+"train" will be used to build and test the algorithm model.
+"test" will be used to make prediction.
 ```{r, cache = T}
 setwd("./Machine Learning/Assignment1")
 train_url<-"https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv"
@@ -30,13 +32,7 @@ test <- read.csv("~/testing.csv")
 ```
 
 ## Preprocess data
-
-```{r, cache = T}
-dim(train)
-summary(train)
-```
-
-Training data contains 19622 observations and 160 variables. Two parts of variables are removed to narrow down the dataset.
+Two parts of variables are removed to narrow down the dataset.
 1 NA variables.
 2 Irrelevant variables. In this case, I remove user name, time stamp and windows. These three types of data don't affect users' weight lifting manners.
 
@@ -46,15 +42,17 @@ test <- test[,colSums(is.na(test))==0]
 train <- train[,-c(1:7)]
 test <- test[,-c(1:7)]
 dim(train)
+dim(test)
 ```
 
-There are 53 variables left.
+There are 53 variables left in both groups of data.
 
 ```{r, cache = T}
 [1] 19622    53
+[1] 20 53
 ```
 
-Train data are sliced into two parts, train(70%) and test(30%. The original test data are kept for future prediction.
+"train" data are sliced into two training part and testing part, with the proportion of 7:3. "test" data are kept for prediction in the next stage.
 I also set seed 704 for reproducible purpose.
 
 ```{r, cache = T}
