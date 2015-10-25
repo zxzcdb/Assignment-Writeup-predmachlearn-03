@@ -64,25 +64,51 @@ t_test <- train[-inTrain,]
 
 ## Build model
 Here we have 52 variables to predict with, so I select Random Forest algorithm to build the model because it is quite accurate in picking the correlated variables. It takes long time but produce better result.
-K-fold cross-validation is applied to evaluate the model. In this case, I split data into 10 folds.
+K-fold cross-validation is applied to evaluate the model. In this case, I split data into 5 folds.
 ```{r, cache = T}
-t_control <- trainControl(method="cv", 10)
+t_control <- trainControl(method="cv", 5)
 modelFit <- train(classe~., data=t_train, method="rf", trControl=t_control, prox=TRUE)
-
 ```
 
 ## Test the model
 ```{r, cache = T}
 testmd <- predict(modelFit, newdata=t_test)
-table(testmd, t_test$classe)
-accuracy <- postResample(testmd, t_test$classe)
-accuracy
+confusionMatrix(t_test$classe, testmd)
 ```
 ```
-##  Accuracy     Kappa 
-## 0.9930331 0.9911870
+## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction    A    B    C    D    E
+##          A 1672    1    0    0    1
+##          B    8 1127    4    0    0
+##          C    0    1 1020    5    0
+##          D    0    0   14  949    1
+##          E    0    0    0    6 1076
+## 
+## Overall Statistics
+##                                          
+##                Accuracy : 0.993          
+##                  95% CI : (0.9906, 0.995)
+##     No Information Rate : 0.2855         
+##     P-Value [Acc > NIR] : < 2.2e-16      
+##                                          
+##                   Kappa : 0.9912         
+##  Mcnemar's Test P-Value : NA             
+## 
+## Statistics by Class:
+## 
+##                      Class: A Class: B Class: C Class: D Class: E
+## Sensitivity            0.9952   0.9982   0.9827   0.9885   0.9981
+## Specificity            0.9995   0.9975   0.9988   0.9970   0.9988
+## Pos Pred Value         0.9988   0.9895   0.9942   0.9844   0.9945
+## Neg Pred Value         0.9981   0.9996   0.9963   0.9978   0.9996
+## Prevalence             0.2855   0.1918   0.1764   0.1631   0.1832
+## Detection Rate         0.2841   0.1915   0.1733   0.1613   0.1828
+## Detection Prevalence   0.2845   0.1935   0.1743   0.1638   0.1839
+## Balanced Accuracy      0.9974   0.9979   0.9907   0.9927   0.9984
 ```
-Accuracy is 0.993. Model is considered accurate.
+The accuracy is 0.993. Out of sample error is 0.70%. Model is considered accurate.
 
 ## Predict
 After the model built, I will use it to predict with 20 lines of data in test file.
